@@ -8,8 +8,6 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size.width;
-    print("Hero Widget width📏📏📏: $size");
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: ResponsiveRowColumn(
