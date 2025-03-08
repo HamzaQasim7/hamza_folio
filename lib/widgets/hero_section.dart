@@ -8,15 +8,27 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size.width;
+    print("Hero Widget width📏📏📏: $size");
     return Container(
-      // height: 700,
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: ResponsiveRowColumn(
         rowMainAxisAlignment: MainAxisAlignment.center,
-        layout: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+        layout: ResponsiveBreakpoints.of(context).largerThan(TABLET)
             ? ResponsiveRowColumnType.ROW
             : ResponsiveRowColumnType.COLUMN,
         children: [
+          if (ResponsiveBreakpoints.of(context).smallerThan(TABLET))
+            ResponsiveRowColumnItem(
+              rowFlex: 1,
+              child: Container(
+                padding: const EdgeInsets.all(32),
+                child: Image.asset(
+                  'assets/images/profile-image.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
           ResponsiveRowColumnItem(
             rowFlex: 1,
             child: Column(
@@ -61,58 +73,72 @@ class HeroSection extends StatelessWidget {
                           ],
                         ).value,
                         height: 1.1,
-                        // This will use the theme's color by default
                       ),
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Building beautiful cross-platform applications\nwith Flutter and Dart',
+                  'Building result driven cross-platform applications\nwith Flutter and Dart',
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
                       .copyWith(fontSize: 18),
                 ),
                 const SizedBox(height: 40),
-                Row(
+                ResponsiveRowColumn(
+                  layout: ResponsiveBreakpoints.of(context).smallerThan(TABLET)
+                      ? ResponsiveRowColumnType.COLUMN
+                      : ResponsiveRowColumnType.ROW,
+                  rowSpacing: 16,
+                  columnSpacing: 16,
                   children: [
-                    SocialButton(
-                      message: 'Email',
-                      imageUrl: 'assets/icons/email_img.png',
-                      onTap: () => UrlLauncherUtils.launchEmail('hamzaqasim.co@gmail.com'),
+                    ResponsiveRowColumnItem(
+                      child: SocialButton(
+                        message: 'Email',
+                        imageUrl: 'assets/icons/email_img.png',
+                        onTap: () => UrlLauncherUtils.launchEmail(
+                            'hamzaqasim.co@gmail.com'),
+                      ),
                     ),
-                    const SizedBox(width: 16),
-                    SocialButton(
-                      message: 'WhatsApp',
-                      imageUrl: 'assets/icons/whatsapp_img.png',
-                      onTap: () => UrlLauncherUtils.launchWhatsApp('+923197739591'),
+                    ResponsiveRowColumnItem(
+                      child: SocialButton(
+                        message: 'WhatsApp',
+                        imageUrl: 'assets/icons/whatsapp_img.png',
+                        onTap: () =>
+                            UrlLauncherUtils.launchWhatsApp('+923197739591'),
+                      ),
                     ),
-                    const SizedBox(width: 16),
-                    SocialButton(
-                      message: 'Github',
-                      imageUrl: 'assets/icons/github_img.png',
-                      onTap: () => UrlLauncherUtils.launchGitHub('HamzaQasim7'),
+                    ResponsiveRowColumnItem(
+                      child: SocialButton(
+                        message: 'Github',
+                        imageUrl: 'assets/icons/github_img.png',
+                        onTap: () =>
+                            UrlLauncherUtils.launchGitHub('HamzaQasim7'),
+                      ),
                     ),
-                    const SizedBox(width: 16),
-                    SocialButton(
-                      message: 'LinkedIn',
-                      imageUrl: 'assets/icons/linkedin_img.png',
-                      onTap: () => UrlLauncherUtils.launchLinkedIn('hamzaqasim-flutterdeveloper'),
+                    ResponsiveRowColumnItem(
+                      child: SocialButton(
+                        message: 'LinkedIn',
+                        imageUrl: 'assets/icons/linkedin_img.png',
+                        onTap: () => UrlLauncherUtils.launchLinkedIn(
+                            'hamzaqasim-flutterdeveloper'),
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          ResponsiveRowColumnItem(
-            rowFlex: 1,
-            child: Container(
-              padding: const EdgeInsets.all(32),
-              child: Image.asset(
-                'assets/images/port_new_img.png',
-                fit: BoxFit.contain,
+          if (!ResponsiveBreakpoints.of(context).smallerThan(TABLET))
+            ResponsiveRowColumnItem(
+              rowFlex: 1,
+              child: Container(
+                padding: const EdgeInsets.all(32),
+                child: Image.asset(
+                  'assets/images/profile-image.png',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
