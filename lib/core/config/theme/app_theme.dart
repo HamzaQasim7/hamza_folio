@@ -13,17 +13,14 @@ class AppTheme {
         primary: const Color(0xFF2D2F36),
         secondary: const Color(0xFF6C63FF),
         tertiary: const Color(0xFF4ECDC4),
-        background: const Color(0xFFFAFAFA),
         surface: Colors.white,
-        surfaceVariant: const Color(0xFFF2F2F2),
         onPrimary: Colors.white,
         onSecondary: Colors.white,
-        onBackground: const Color(0xFF2D2F36),
         onSurface: const Color(0xFF2D2F36),
         error: const Color(0xFFDC3545),
       ),
       textTheme: _lightTextTheme(base.textTheme),
-      cardTheme: _cardTheme(base.cardTheme, Colors.white),
+      cardTheme: _cardTheme(Colors.white),
       inputDecorationTheme:
           _inputDecorationTheme(Colors.white, const Color(0xFFE0E0E0)),
       elevatedButtonTheme: _elevatedButtonTheme(),
@@ -41,17 +38,15 @@ class AppTheme {
         primary: const Color(0xFF6C63FF),
         secondary: const Color(0xFF4ECDC4),
         tertiary: const Color(0xFF6C63FF),
-        background: const Color(0xFF121212),
         surface: const Color(0xFF1E1E1E),
-        surfaceVariant: const Color(0xFF2C2C2C),
+        surfaceContainerHighest: const Color(0xFF2C2C2C),
         onPrimary: Colors.white,
         onSecondary: Colors.white,
-        onBackground: Colors.white,
         onSurface: Colors.white,
         error: const Color(0xFFDC3545),
       ),
       textTheme: _darkTextTheme(base.textTheme),
-      cardTheme: _cardTheme(base.cardTheme, const Color(0xFF1E1E1E)),
+      cardTheme: _cardTheme(const Color(0xFF1E1E1E)),
       inputDecorationTheme: _inputDecorationTheme(
           const Color(0xFF1E1E1E), const Color(0xFF3E3E3E)),
       elevatedButtonTheme: _elevatedButtonTheme(),
@@ -148,8 +143,8 @@ class AppTheme {
     );
   }
 
-  static CardTheme _cardTheme(CardTheme base, Color color) {
-    return base.copyWith(
+  static CardTheme _cardTheme(Color color) {
+    return CardTheme(
       color: color,
       elevation: 0,
       shape: RoundedRectangleBorder(
