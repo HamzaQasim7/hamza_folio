@@ -12,6 +12,20 @@ import '../skills/skill_section.dart';
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
+  static final GlobalKey heroKey = GlobalKey();
+  static final GlobalKey aboutKey = GlobalKey();
+  static final GlobalKey projectsKey = GlobalKey();
+  static final GlobalKey skillsKey = GlobalKey();
+  static final GlobalKey contactsKey = GlobalKey();
+
+  void _scrollToSection(BuildContext context, GlobalKey key) {
+    Scrollable.ensureVisible(
+      key.currentContext!,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,14 +44,14 @@ class MyHomePage extends StatelessWidget {
                   : _MobileNavBar(),
             ),
           ),
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Column(
               children: [
-                HeroSection(),
-                AboutSection(),
-                ProjectsSection(),
-                SkillsSection(),
-                ContactSection(),
+                HeroSection(key: heroKey),
+                AboutSection(key: aboutKey),
+                ProjectsSection(key: projectsKey),
+                SkillsSection(key: skillsKey),
+                ContactSection(key: contactsKey),
               ],
             ),
           ),
@@ -55,19 +69,54 @@ class _DesktopNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'HQ',
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+          InkWell(
+            onTap: () => Scrollable.ensureVisible(
+              MyHomePage.heroKey.currentContext!,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+            ),
+            child: Text(
+              'HQ',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
           Row(
             children: [
-              NavItemWidget(title: 'ABOUT', onTap: () {}),
-              NavItemWidget(title: 'PROJECTS', onTap: () {}),
-              NavItemWidget(title: 'SKILLS', onTap: () {}),
-              NavItemWidget(title: 'CONTACTS', onTap: () {}),
+              NavItemWidget(
+                title: 'ABOUT',
+                onTap: () => Scrollable.ensureVisible(
+                  MyHomePage.aboutKey.currentContext!,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                ),
+              ),
+              NavItemWidget(
+                title: 'PROJECTS',
+                onTap: () => Scrollable.ensureVisible(
+                  MyHomePage.projectsKey.currentContext!,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                ),
+              ),
+              NavItemWidget(
+                title: 'SKILLS',
+                onTap: () => Scrollable.ensureVisible(
+                  MyHomePage.skillsKey.currentContext!,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                ),
+              ),
+              NavItemWidget(
+                title: 'CONTACTS',
+                onTap: () => Scrollable.ensureVisible(
+                  MyHomePage.contactsKey.currentContext!,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                ),
+              ),
               const SizedBox(width: 24),
               const ResumeButtonWidget(),
             ],
@@ -131,11 +180,21 @@ class _MobileNavBarState extends State<_MobileNavBar>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'HQ',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: 24,
-                    ),
+              InkWell(
+                onTap: () {
+                  if (_isMenuOpen) _toggleMenu();
+                  Scrollable.ensureVisible(
+                    MyHomePage.heroKey.currentContext!,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: Text(
+                  'HQ',
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        fontSize: 24,
+                      ),
+                ),
               ),
               IconButton(
                 icon: AnimatedIcon(
@@ -157,14 +216,23 @@ class _MobileNavBarState extends State<_MobileNavBar>
               child: Column(
                 children: [
                   _MobileMenuItem(
+                    title: 'About',
+                    onTap: () {
+                      _toggleMenu();
+                      Scrollable.ensureVisible(
+                        MyHomePage.aboutKey.currentContext!,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                  ),
+                  _MobileMenuItem(
                     title: 'Projects',
                     onTap: () {
                       _toggleMenu();
                       Scrollable.ensureVisible(
-                        context,
-                        duration:
-                            // Replace with your project section's global key
-                            const Duration(milliseconds: 500),
+                        MyHomePage.projectsKey.currentContext!,
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       );
                     },
@@ -173,14 +241,22 @@ class _MobileNavBarState extends State<_MobileNavBar>
                     title: 'Skills',
                     onTap: () {
                       _toggleMenu();
-                      // Add scroll to skills section
+                      Scrollable.ensureVisible(
+                        MyHomePage.skillsKey.currentContext!,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
                     },
                   ),
                   _MobileMenuItem(
                     title: 'Contact',
                     onTap: () {
                       _toggleMenu();
-                      // Add scroll to contact section
+                      Scrollable.ensureVisible(
+                        MyHomePage.contactsKey.currentContext!,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                      );
                     },
                   ),
                   const SizedBox(height: 16),
