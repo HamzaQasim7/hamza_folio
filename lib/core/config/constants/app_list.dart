@@ -1,22 +1,36 @@
 class AppLists {
   static final projects = [
     {
+      'title': 'GoHomeEase - Home Service Platform',
+      'description':
+          'GoHomeEase is a Flutter-based mobile application designed to connect homeowners with service providers such as plumbers, electricians.',
+      'image': 'assets/images/gohomeease.png',
+      'url': 'https://github.com/HamzaQasim7/gohomeease_app.git'
+    },
+    {
+      'title': 'Konooz - Shopify Mobile App',
+      'description':
+          'Konooz is a Flutter-powered e-commerce mobile app built for Shopify, offering a seamless shopping experience for users on both Android and iOS platforms.',
+      'image': 'assets/images/konooz.png',
+      'url': 'https://github.com/HamzaQasim7/kanzoo_shopify_store'
+    },
+    {
       'title': 'Warehouse Management System',
       'description':
-          'A modern warehouse application built with Flutter and Firebase.',
+          'A comprehensive warehouse management system designed to streamline inventory tracking, order fulfillment, and logistics operations, leveraging Flutter and Firebase technologies.',
       'image': 'assets/images/warehouseApp.jpg',
       'url': 'https://github.com/HamzaQasim7/Warehouse_Managment_App'
     },
     {
       'title': 'Water Consumption Tracker',
-      'description': 'Analytics dashboard for social media management.',
+      'description': 'A mobile app designed to track and manage water consumption, promoting sustainability and eco-friendliness.',
       'image': 'assets/images/water_consumption_tracker.png',
       'url': 'https://github.com/HamzaQasim7/water_consumption_app'
     },
     {
       'title': 'Agriculture Management & Disease Diagnosing',
       'description':
-          'Cross-platform fitness tracking application with real-time monitoring.',
+          'Agriculture management and disease diagnosing app for efficient crop monitoring and disease detection.',
       'image': 'assets/images/agriConnect.png',
       'url': 'https://github.com/HamzaQasim7/agri_connect'
     },

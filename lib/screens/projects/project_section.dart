@@ -28,7 +28,7 @@ class ProjectsSection extends StatelessWidget {
             ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: 3,
+            itemCount: 5,
             itemBuilder: (context, index) {
               return ProjectCardWidget(
                 title: AppLists.projects[index]['title']!,

@@ -55,6 +55,7 @@ class ProjectCardWidget extends StatelessWidget {
                       Text(
                         title,
                         overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                         style: Theme.of(context)
                             .textTheme
                             .headlineSmall!
@@ -63,9 +64,14 @@ class ProjectCardWidget extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.primary),
                       ),
                       const SizedBox(height: 12),
-                      Text(
-                        description,
-                        style: Theme.of(context).textTheme.bodyLarge,
+                      Tooltip(
+                        message: description,
+                        child: Text(
+                          description,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       Row(
