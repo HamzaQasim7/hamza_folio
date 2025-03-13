@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:glassmorphism/glassmorphism.dart';
 import 'package:hamza_folio/screens/about/about_section.dart';
 import 'package:hamza_folio/screens/contact/contact_section.dart';
 import 'package:hamza_folio/screens/home/widgets/nav_items_widget.dart';
@@ -29,31 +32,39 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          SliverAppBar(
-            floating: true,
-            backgroundColor:
-                Theme.of(context).colorScheme.surface.withOpacity(0.8),
-            elevation: 0,
-            expandedHeight: 80,
-            flexibleSpace: FlexibleSpaceBar(
-              background: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-                  ? _DesktopNavBar()
-                  : _MobileNavBar(),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                HeroSection(key: heroKey),
-                AboutSection(key: aboutKey),
-                ProjectsSection(key: projectsKey),
-                SkillsSection(key: skillsKey),
-                ContactSection(key: contactsKey),
-              ],
-            ),
+      body: Stack(
+        children: [
+          // Animated Background with floating circles
+          const AnimatedBackground(),
+          
+          // Main Content
+          CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                backgroundColor:
+                    Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                elevation: 0,
+                expandedHeight: 80,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+                      ? _DesktopNavBar()
+                      : _MobileNavBar(),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    HeroSection(key: heroKey),
+                    AboutSection(key: aboutKey),
+                    ProjectsSection(key: projectsKey),
+                    SkillsSection(key: skillsKey),
+                    ContactSection(key: contactsKey),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -377,4 +388,158 @@ class _MobileSocialButton extends StatelessWidget {
       ),
     );
   }
+}
+
+// Add this new class for the animated background
+class AnimatedBackground extends StatefulWidget {
+  const AnimatedBackground({super.key});
+
+  @override
+  State<AnimatedBackground> createState() => _AnimatedBackgroundState();
+}
+
+class _AnimatedBackgroundState extends State<AnimatedBackground>
+    with TickerProviderStateMixin {
+  late List<AnimationController> _controllers;
+  late List<Animation<double>> _animations;
+  final List<_FloatingCircle> circles = [];
+  final random = Random();
+  bool _initialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Only initialize controllers here
+    _controllers = List.generate(
+      15,
+      (index) => AnimationController(
+        duration: Duration(seconds: 3 + random.nextInt(5)),
+        vsync: this,
+      ),
+    );
+
+    _animations = _controllers.map((controller) {
+      return Tween<double>(
+        begin: 0,
+        end: 1,
+      ).animate(
+        CurvedAnimation(
+          parent: controller,
+          curve: Curves.easeInOut,
+        ),
+      )..addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            controller.reverse();
+          } else if (status == AnimationStatus.dismissed) {
+            controller.forward();
+          }
+        });
+    }).toList();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      // Initialize circles here where we can safely access Theme
+      circles.clear();
+      for (int i = 0; i < 15; i++) {
+        circles.add(
+          _FloatingCircle(
+            x: random.nextDouble(),
+            y: random.nextDouble(),
+            size: 20 + random.nextDouble() * 40,
+            color: i % 2 == 0
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.secondary,
+          ),
+        );
+      }
+
+      // Start animations with different delays
+      for (var i = 0; i < _controllers.length; i++) {
+        Future.delayed(
+          Duration(milliseconds: random.nextInt(2000)),
+          () {
+            if (mounted) {
+              _controllers[i].forward();
+            }
+          },
+        );
+      }
+      _initialized = true;
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: List.generate(
+        circles.length,
+        (index) => AnimatedBuilder(
+          animation: _animations[index],
+          builder: (context, child) {
+            final circle = circles[index];
+            final animation = _animations[index].value;
+            
+            // Calculate position with smooth movement
+            final dx = sin(animation * pi * 2) * 50;
+            final dy = cos(animation * pi * 2) * 50;
+
+            return Positioned(
+              left: MediaQuery.of(context).size.width * circle.x + dx,
+              top: MediaQuery.of(context).size.height * circle.y + dy,
+              child: GlassmorphicContainer(
+                width: circle.size,
+                height: circle.size,
+                borderRadius: circle.size / 2,
+                blur: 10,
+                border: 0,
+                linearGradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    circle.color.withOpacity(0.1),
+                    circle.color.withOpacity(0.05),
+                  ],
+                ),
+                borderGradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    circle.color.withOpacity(0.2),
+                    circle.color.withOpacity(0.1),
+                  ],
+                ),
+                child: Container(),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// Helper class to store circle properties
+class _FloatingCircle {
+  final double x;
+  final double y;
+  final double size;
+  final Color color;
+
+  _FloatingCircle({
+    required this.x,
+    required this.y,
+    required this.size,
+    required this.color,
+  });
 }
