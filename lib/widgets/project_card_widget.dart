@@ -20,7 +20,7 @@ class ProjectCardWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.cardBackground,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
             color: Colors.white.withOpacity(0.1),
@@ -63,7 +63,7 @@ class ProjectCardWidget extends StatelessWidget {
                                 fontSize: 20,
                                 color: Theme.of(context).colorScheme.primary),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 11),
                       Tooltip(
                         message: description,
                         child: Text(
