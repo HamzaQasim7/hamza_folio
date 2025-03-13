@@ -31,28 +31,47 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = ResponsiveBreakpoints.of(context).largerThan(TABLET);
+
     return Scaffold(
+      // Show top app bar only for desktop
+      appBar: isDesktop
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(80),
+              child: Container(
+                color: Theme.of(context).colorScheme.surface.withOpacity(0.8),
+                child: _DesktopNavBar(),
+              ),
+            )
+          : AppBar(
+              backgroundColor:
+                  Theme.of(context).colorScheme.surface.withOpacity(0.8),
+              title: Text(
+                'HQ',
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: 24,
+                    ),
+              ),
+              actions: [
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  ),
+                ),
+              ],
+            ),
+      // Side drawer for mobile and tablet
+      endDrawer: !isDesktop ? const _MobileDrawer() : null,
       body: Stack(
         children: [
-          // Animated Background with floating circles
+          // Animated Background
           const AnimatedBackground(),
-          
+
           // Main Content
           CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
-              SliverAppBar(
-                floating: true,
-                backgroundColor:
-                    Theme.of(context).colorScheme.surface.withOpacity(0.8),
-                elevation: 0,
-                expandedHeight: 80,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
-                      ? _DesktopNavBar()
-                      : _MobileNavBar(),
-                ),
-              ),
               SliverToBoxAdapter(
                 child: Column(
                   children: [
@@ -138,221 +157,147 @@ class _DesktopNavBar extends StatelessWidget {
   }
 }
 
-class _MobileNavBar extends StatefulWidget {
-  @override
-  State<_MobileNavBar> createState() => _MobileNavBarState();
-}
-
-class _MobileNavBarState extends State<_MobileNavBar>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _animation;
-  bool _isMenuOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _animation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeInOut,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _toggleMenu() {
-    setState(() {
-      _isMenuOpen = !_isMenuOpen;
-      if (_isMenuOpen) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
-    });
-  }
+// New Drawer Widget
+class _MobileDrawer extends StatelessWidget {
+  const _MobileDrawer();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Drawer(
+      child: GlassmorphicContainer(
+        width: double.infinity,
+        height: double.infinity,
+        borderRadius: 0,
+        blur: 10,
+        border: 0,
+        linearGradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).colorScheme.surface.withOpacity(0.9),
+            Theme.of(context).colorScheme.surface.withOpacity(0.8),
+          ],
+        ),
+        borderGradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).colorScheme.surface.withOpacity(0.5),
+            Theme.of(context).colorScheme.surface.withOpacity(0.5),
+          ],
+        ),
+        child: SafeArea(
+          child: Column(
             children: [
-              InkWell(
+              // Drawer Header
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Menu',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(),
+              // Navigation Items
+              _DrawerItem(
+                title: 'About',
+                icon: Icons.person_outline,
                 onTap: () {
-                  if (_isMenuOpen) _toggleMenu();
+                  Navigator.pop(context);
                   Scrollable.ensureVisible(
-                    MyHomePage.heroKey.currentContext!,
+                    MyHomePage.aboutKey.currentContext!,
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.easeInOut,
                   );
                 },
-                child: Text(
-                  'HQ',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 24,
-                      ),
-                ),
               ),
-              IconButton(
-                icon: AnimatedIcon(
-                  icon: AnimatedIcons.menu_close,
-                  progress: _animation,
-                ),
-                onPressed: _toggleMenu,
+              _DrawerItem(
+                title: 'Projects',
+                icon: Icons.work_outline,
+                onTap: () {
+                  Navigator.pop(context);
+                  Scrollable.ensureVisible(
+                    MyHomePage.projectsKey.currentContext!,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+              _DrawerItem(
+                title: 'Skills',
+                icon: Icons.code,
+                onTap: () {
+                  Navigator.pop(context);
+                  Scrollable.ensureVisible(
+                    MyHomePage.skillsKey.currentContext!,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+              _DrawerItem(
+                title: 'Contact',
+                icon: Icons.mail_outline,
+                onTap: () {
+                  Navigator.pop(context);
+                  Scrollable.ensureVisible(
+                    MyHomePage.contactsKey.currentContext!,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+              ),
+              const Divider(),
+              // Resume Button
+              const Spacer(),
+              const Padding(
+                padding: EdgeInsets.all(16),
+                child: ResumeButtonWidget(),
               ),
             ],
           ),
         ),
-        // Mobile Menu Overlay
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          height: _isMenuOpen ? 280 : 0,
-          child: Container(
-            color: Theme.of(context).colorScheme.surface,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _MobileMenuItem(
-                    title: 'About',
-                    onTap: () {
-                      _toggleMenu();
-                      Scrollable.ensureVisible(
-                        MyHomePage.aboutKey.currentContext!,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                  ),
-                  _MobileMenuItem(
-                    title: 'Projects',
-                    onTap: () {
-                      _toggleMenu();
-                      Scrollable.ensureVisible(
-                        MyHomePage.projectsKey.currentContext!,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                  ),
-                  _MobileMenuItem(
-                    title: 'Skills',
-                    onTap: () {
-                      _toggleMenu();
-                      Scrollable.ensureVisible(
-                        MyHomePage.skillsKey.currentContext!,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                  ),
-                  _MobileMenuItem(
-                    title: 'Contact',
-                    onTap: () {
-                      _toggleMenu();
-                      Scrollable.ensureVisible(
-                        MyHomePage.contactsKey.currentContext!,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle resume download or view
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 16,
-                        ),
-                        minimumSize: const Size(double.infinity, 48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        'Resume',
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _MobileSocialButton(
-                        icon: Icons.email_outlined,
-                        onTap: () {},
-                      ),
-                      const SizedBox(width: 16),
-                      _MobileSocialButton(
-                        icon: Icons.code,
-                        onTap: () {},
-                      ),
-                      const SizedBox(width: 16),
-                      _MobileSocialButton(
-                        icon: Icons.person_outline,
-                        onTap: () {},
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
 
-class _MobileMenuItem extends StatelessWidget {
+// New Drawer Item Widget
+class _DrawerItem extends StatelessWidget {
   final String title;
+  final IconData icon;
   final VoidCallback onTap;
 
-  const _MobileMenuItem({
+  const _DrawerItem({
     required this.title,
+    required this.icon,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 16,
-        ),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-        ),
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: Theme.of(context).colorScheme.primary,
       ),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+      ),
+      onTap: onTap,
     );
   }
 }
@@ -489,7 +434,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground>
           builder: (context, child) {
             final circle = circles[index];
             final animation = _animations[index].value;
-            
+
             // Calculate position with smooth movement
             final dx = sin(animation * pi * 2) * 50;
             final dy = cos(animation * pi * 2) * 50;

@@ -28,6 +28,7 @@ class HeroSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 16),
                 Text(
                   'WELCOME TO MY PORTFOLIO ✋',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -137,7 +138,10 @@ class HeroSection extends StatelessWidget {
                     gradient: LinearGradient(
                       colors: [
                         Theme.of(context).colorScheme.primary.withOpacity(0.2),
-                        Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                        Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(0.2),
                       ],
                     ),
                   ),
@@ -216,7 +220,10 @@ class HeroSection extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.2),
                             width: 2,
                           ),
                         ),

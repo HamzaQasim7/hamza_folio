@@ -28,13 +28,16 @@ class ContactSection extends StatelessWidget {
           const SizedBox(height: 48),
           ResponsiveRowColumn(
             rowMainAxisAlignment: MainAxisAlignment.spaceBetween,
-            layout: ResponsiveBreakpoints.of(context).largerThan(MOBILE)
+            layout: ResponsiveBreakpoints.of(context).largerThan(TABLET)
                 ? ResponsiveRowColumnType.ROW
                 : ResponsiveRowColumnType.COLUMN,
             children: [
               const ResponsiveRowColumnItem(
                 rowFlex: 1,
                 child: ContactForm(),
+              ),
+              const ResponsiveRowColumnItem(
+                child: SizedBox(height: 48),
               ),
               ResponsiveRowColumnItem(
                 rowFlex: 1,

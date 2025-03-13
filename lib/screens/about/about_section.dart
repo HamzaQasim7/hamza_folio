@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hamza_folio/core/config/constants/app_strings.dart';
 import 'package:hamza_folio/widgets/app_header_text.dart';
 
 class AboutSection extends StatelessWidget {
@@ -15,7 +16,7 @@ class AboutSection extends StatelessWidget {
           const AppHeaderText(text: 'About Me'),
           const SizedBox(height: 24),
           Text(
-            'A passionate Flutter developer with strong expertise in cross-platform apps, REST APIs, UI/UX, widgets, and state management solutions. Proven track record in delivering cutting-edge solutions, including API integration, third-party libraries, and performance optimization. Adept at debugging to ensure high-quality, responsive apps and An agile collaborator committed to staying current with industry trends.',
+            AppStrings.aboutMe,
             style: GoogleFonts.poppins(
               textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     height: 1.6,
