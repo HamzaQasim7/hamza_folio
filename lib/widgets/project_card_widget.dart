@@ -63,7 +63,7 @@ class ProjectCardWidget extends StatelessWidget {
                                 fontSize: 20,
                                 color: Theme.of(context).colorScheme.primary),
                       ),
-                      const SizedBox(height: 11),
+                      const SizedBox(height: 12),
                       Tooltip(
                         message: description,
                         child: Text(

@@ -147,7 +147,7 @@ class _DesktopNavBar extends StatelessWidget {
                   curve: Curves.easeInOut,
                 ),
               ),
-              const SizedBox(width: 24),
+              const SizedBox(width: 22),
               const ResumeButtonWidget(),
             ],
           ),
